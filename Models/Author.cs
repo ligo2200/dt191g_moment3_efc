@@ -1,11 +1,14 @@
-﻿namespace moment3_efc.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace moment3_efc.Models
 {
     public class Author
     {
         public int AuthorId { get; set; }
+        [Display(Name = "Författare")]
         public string? Name { get; set; }
 
-        // Navigeringsegenskap för böcker skrivna av författaren
+        // relation
         public List<Book>? Books { get; set; } 
 
     }

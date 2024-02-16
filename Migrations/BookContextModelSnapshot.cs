@@ -40,8 +40,8 @@ namespace moment3_efc.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("PublicationDate")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("PublicationDate")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()

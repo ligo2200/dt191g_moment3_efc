@@ -11,7 +11,7 @@ using moment3_efc.Data;
 namespace moment3_efc.Migrations
 {
     [DbContext(typeof(BookContext))]
-    [Migration("20240215194334_InitialCreate")]
+    [Migration("20240216160235_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -43,8 +43,8 @@ namespace moment3_efc.Migrations
                     b.Property<int>("AuthorId")
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("PublicationDate")
-                        .HasColumnType("TEXT");
+                    b.Property<int>("PublicationDate")
+                        .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
                         .IsRequired()

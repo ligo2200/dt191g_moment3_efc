@@ -6,6 +6,7 @@ namespace moment3_efc.Models
     {
         public int BorrowerId { get; set; }
         [Required]
+        [Display(Name = "Namn på Låntagare")]
         public string? BorrowerName { get; set; }
     }
 }
