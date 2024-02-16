@@ -82,7 +82,7 @@ namespace moment3_efc.Controllers
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "AuthorId", "AuthorId", book.AuthorId);
+            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "AuthorId", "Name", book.AuthorId);
             return View(book);
         }
 
