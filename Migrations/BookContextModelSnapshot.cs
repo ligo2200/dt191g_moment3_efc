@@ -17,15 +17,28 @@ namespace moment3_efc.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.2");
 
+            modelBuilder.Entity("moment3_efc.Models.Author", b =>
+                {
+                    b.Property<int>("AuthorId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("AuthorId");
+
+                    b.ToTable("Author");
+                });
+
             modelBuilder.Entity("moment3_efc.Models.Book", b =>
                 {
                     b.Property<int>("BookId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("Author")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
+                    b.Property<int>("AuthorId")
+                        .HasColumnType("INTEGER");
 
                     b.Property<DateTime>("PublicationDate")
                         .HasColumnType("TEXT");
@@ -36,7 +49,9 @@ namespace moment3_efc.Migrations
 
                     b.HasKey("BookId");
 
-                    b.ToTable("Book");
+                    b.HasIndex("AuthorId");
+
+                    b.ToTable("Books");
                 });
 
             modelBuilder.Entity("moment3_efc.Models.Borrower", b =>
@@ -78,6 +93,17 @@ namespace moment3_efc.Migrations
                     b.ToTable("Loans");
                 });
 
+            modelBuilder.Entity("moment3_efc.Models.Book", b =>
+                {
+                    b.HasOne("moment3_efc.Models.Author", "Author")
+                        .WithMany("Books")
+                        .HasForeignKey("AuthorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Author");
+                });
+
             modelBuilder.Entity("moment3_efc.Models.Loan", b =>
                 {
                     b.HasOne("moment3_efc.Models.Book", "Book")
@@ -95,6 +121,11 @@ namespace moment3_efc.Migrations
                     b.Navigation("Book");
 
                     b.Navigation("Borrower");
+                });
+
+            modelBuilder.Entity("moment3_efc.Models.Author", b =>
+                {
+                    b.Navigation("Books");
                 });
 #pragma warning restore 612, 618
         }

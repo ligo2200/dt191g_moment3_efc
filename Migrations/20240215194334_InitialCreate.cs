@@ -12,18 +12,16 @@ namespace moment3_efc.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Book",
+                name: "Author",
                 columns: table => new
                 {
-                    BookId = table.Column<int>(type: "INTEGER", nullable: false)
+                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
-                    Title = table.Column<string>(type: "TEXT", nullable: false),
-                    Author = table.Column<string>(type: "TEXT", nullable: false),
-                    PublicationDate = table.Column<DateTime>(type: "TEXT", nullable: false)
+                    Name = table.Column<string>(type: "TEXT", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Book", x => x.BookId);
+                    table.PrimaryKey("PK_Author", x => x.AuthorId);
                 });
 
             migrationBuilder.CreateTable(
@@ -40,6 +38,27 @@ namespace moment3_efc.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Books",
+                columns: table => new
+                {
+                    BookId = table.Column<int>(type: "INTEGER", nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Title = table.Column<string>(type: "TEXT", nullable: false),
+                    PublicationDate = table.Column<DateTime>(type: "TEXT", nullable: false),
+                    AuthorId = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Books", x => x.BookId);
+                    table.ForeignKey(
+                        name: "FK_Books_Author_AuthorId",
+                        column: x => x.AuthorId,
+                        principalTable: "Author",
+                        principalColumn: "AuthorId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Loans",
                 columns: table => new
                 {
@@ -53,9 +72,9 @@ namespace moment3_efc.Migrations
                 {
                     table.PrimaryKey("PK_Loans", x => x.LoanId);
                     table.ForeignKey(
-                        name: "FK_Loans_Book_BookId",
+                        name: "FK_Loans_Books_BookId",
                         column: x => x.BookId,
-                        principalTable: "Book",
+                        principalTable: "Books",
                         principalColumn: "BookId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -65,6 +84,11 @@ namespace moment3_efc.Migrations
                         principalColumn: "BorrowerId",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Books_AuthorId",
+                table: "Books",
+                column: "AuthorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Loans_BookId",
@@ -84,10 +108,13 @@ namespace moment3_efc.Migrations
                 name: "Loans");
 
             migrationBuilder.DropTable(
-                name: "Book");
+                name: "Books");
 
             migrationBuilder.DropTable(
                 name: "Borrowers");
+
+            migrationBuilder.DropTable(
+                name: "Author");
         }
     }
 }

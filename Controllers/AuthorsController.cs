@@ -10,23 +10,22 @@ using moment3_efc.Models;
 
 namespace moment3_efc.Controllers
 {
-    public class LoansController : Controller
+    public class AuthorsController : Controller
     {
         private readonly BookContext _context;
 
-        public LoansController(BookContext context)
+        public AuthorsController(BookContext context)
         {
             _context = context;
         }
 
-        // GET: Loans
+        // GET: Authors
         public async Task<IActionResult> Index()
         {
-            var bookContext = _context.Loans.Include(l => l.Book).Include(l => l.Borrower);
-            return View(await bookContext.ToListAsync());
+            return View(await _context.Author.ToListAsync());
         }
 
-        // GET: Loans/Details/5
+        // GET: Authors/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,45 +33,39 @@ namespace moment3_efc.Controllers
                 return NotFound();
             }
 
-            var loan = await _context.Loans
-                .Include(l => l.Book)
-                .Include(l => l.Borrower)
-                .FirstOrDefaultAsync(m => m.LoanId == id);
-            if (loan == null)
+            var author = await _context.Author
+                .FirstOrDefaultAsync(m => m.AuthorId == id);
+            if (author == null)
             {
                 return NotFound();
             }
 
-            return View(loan);
+            return View(author);
         }
 
-        // GET: Loans/Create
+        // GET: Authors/Create
         public IActionResult Create()
         {
-            ViewData["BookId"] = new SelectList(_context.Books, "BookId", "Title");
-            ViewData["BorrowerId"] = new SelectList(_context.Borrowers, "BorrowerId", "BorrowerName");
             return View();
         }
 
-        // POST: Loans/Create
+        // POST: Authors/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LoanId,BookId,BorrowerId,LoanDate")] Loan loan)
+        public async Task<IActionResult> Create([Bind("AuthorId,Name")] Author author)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(loan);
+                _context.Add(author);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookId"] = new SelectList(_context.Books, "BookId", "Title", loan.BookId);
-            ViewData["BorrowerId"] = new SelectList(_context.Borrowers, "BorrowerId", "BorrowerName", loan.BorrowerId);
-            return View(loan);
+            return View(author);
         }
 
-        // GET: Loans/Edit/5
+        // GET: Authors/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,24 +73,22 @@ namespace moment3_efc.Controllers
                 return NotFound();
             }
 
-            var loan = await _context.Loans.FindAsync(id);
-            if (loan == null)
+            var author = await _context.Author.FindAsync(id);
+            if (author == null)
             {
                 return NotFound();
             }
-            ViewData["BookId"] = new SelectList(_context.Books, "BookId", "Title", loan.BookId);
-            ViewData["BorrowerId"] = new SelectList(_context.Borrowers, "BorrowerId", "BorrowerName", loan.BorrowerId);
-            return View(loan);
+            return View(author);
         }
 
-        // POST: Loans/Edit/5
+        // POST: Authors/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("LoanId,BookId,BorrowerId,LoanDate")] Loan loan)
+        public async Task<IActionResult> Edit(int id, [Bind("AuthorId,Name")] Author author)
         {
-            if (id != loan.LoanId)
+            if (id != author.AuthorId)
             {
                 return NotFound();
             }
@@ -106,12 +97,12 @@ namespace moment3_efc.Controllers
             {
                 try
                 {
-                    _context.Update(loan);
+                    _context.Update(author);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LoanExists(loan.LoanId))
+                    if (!AuthorExists(author.AuthorId))
                     {
                         return NotFound();
                     }
@@ -122,12 +113,10 @@ namespace moment3_efc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["BookId"] = new SelectList(_context.Books, "BookId", "Title", loan.BookId);
-            ViewData["BorrowerId"] = new SelectList(_context.Borrowers, "BorrowerId", "BorrowerName", loan.BorrowerId);
-            return View(loan);
+            return View(author);
         }
 
-        // GET: Loans/Delete/5
+        // GET: Authors/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,36 +124,34 @@ namespace moment3_efc.Controllers
                 return NotFound();
             }
 
-            var loan = await _context.Loans
-                .Include(l => l.Book)
-                .Include(l => l.Borrower)
-                .FirstOrDefaultAsync(m => m.LoanId == id);
-            if (loan == null)
+            var author = await _context.Author
+                .FirstOrDefaultAsync(m => m.AuthorId == id);
+            if (author == null)
             {
                 return NotFound();
             }
 
-            return View(loan);
+            return View(author);
         }
 
-        // POST: Loans/Delete/5
+        // POST: Authors/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var loan = await _context.Loans.FindAsync(id);
-            if (loan != null)
+            var author = await _context.Author.FindAsync(id);
+            if (author != null)
             {
-                _context.Loans.Remove(loan);
+                _context.Author.Remove(author);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool LoanExists(int id)
+        private bool AuthorExists(int id)
         {
-            return _context.Loans.Any(e => e.LoanId == id);
+            return _context.Author.Any(e => e.AuthorId == id);
         }
     }
 }

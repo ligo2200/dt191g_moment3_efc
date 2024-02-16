@@ -22,7 +22,8 @@ namespace moment3_efc.Controllers
         // GET: Books
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Books.ToListAsync());
+            var bookContext = _context.Books.Include(b => b.Author);
+            return View(await bookContext.ToListAsync());
         }
 
         // GET: Books/Details/5
@@ -34,6 +35,7 @@ namespace moment3_efc.Controllers
             }
 
             var book = await _context.Books
+                .Include(b => b.Author)
                 .FirstOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {
@@ -46,6 +48,7 @@ namespace moment3_efc.Controllers
         // GET: Books/Create
         public IActionResult Create()
         {
+            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "AuthorId", "AuthorId");
             return View();
         }
 
@@ -54,7 +57,7 @@ namespace moment3_efc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("BookId,Title,Author,PublicationDate")] Book book)
+        public async Task<IActionResult> Create([Bind("BookId,Title,PublicationDate,AuthorId")] Book book)
         {
             if (ModelState.IsValid)
             {
@@ -62,6 +65,7 @@ namespace moment3_efc.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "AuthorId", "AuthorId", book.AuthorId);
             return View(book);
         }
 
@@ -78,6 +82,7 @@ namespace moment3_efc.Controllers
             {
                 return NotFound();
             }
+            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "AuthorId", "AuthorId", book.AuthorId);
             return View(book);
         }
 
@@ -86,7 +91,7 @@ namespace moment3_efc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("BookId,Title,Author,PublicationDate")] Book book)
+        public async Task<IActionResult> Edit(int id, [Bind("BookId,Title,PublicationDate,AuthorId")] Book book)
         {
             if (id != book.BookId)
             {
@@ -113,6 +118,7 @@ namespace moment3_efc.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewData["AuthorId"] = new SelectList(_context.Set<Author>(), "AuthorId", "AuthorId", book.AuthorId);
             return View(book);
         }
 
@@ -125,6 +131,7 @@ namespace moment3_efc.Controllers
             }
 
             var book = await _context.Books
+                .Include(b => b.Author)
                 .FirstOrDefaultAsync(m => m.BookId == id);
             if (book == null)
             {

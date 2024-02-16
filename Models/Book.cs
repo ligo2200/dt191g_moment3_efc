@@ -8,10 +8,11 @@ namespace moment3_efc.Models
         [Required]
         [Display(Name = "Titel")]
         public string? Title { get; set; }
-        [Required]
-        [Display(Name = "Författare")]
-        public string? Author { get; set; }
+    
         [Display(Name = "Publiceringsår")]
         public DateTime PublicationDate { get; set; }
+
+        public int AuthorId { get; set; }
+        public Author? Author { get; set; }
     }
 }

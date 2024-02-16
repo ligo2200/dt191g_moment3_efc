@@ -8,6 +8,8 @@ namespace moment3_efc.Models
         public int BookId { get; set; }
         [Required]
         public Book? Book { get; set; }
+
+
         public int BorrowerId { get; set; }
         [Required]
         public Borrower? Borrower { get; set; }
