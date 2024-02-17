@@ -16,6 +16,7 @@ namespace moment3_efc.Models
         [Required]
         [Display(Name = "Låntagarnamn")]
         public Borrower? Borrower { get; set; }
+
         [Display(Name = "Lånedatum")]
         public DateTime LoanDate { get; set; }
     }
