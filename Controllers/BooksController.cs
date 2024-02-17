@@ -82,7 +82,7 @@ namespace moment3_efc.Controllers
             {
                 return NotFound();
             }
-            ViewData["AuthorId"] = new SelectList(_context.Authors, "AuthorId", "AuthorId", book.AuthorId);
+            ViewData["AuthorId"] = new SelectList(_context.Authors, "AuthorId", "AuthorName", book.AuthorId);
             return View(book);
         }
 
@@ -159,6 +159,24 @@ namespace moment3_efc.Controllers
         private bool BookExists(int id)
         {
             return _context.Books.Any(e => e.BookId == id);
+        }
+
+
+        // method for searching books or authors
+        public async Task<IActionResult> IndexWithSearch(string searchString)
+        {
+            // select each row of books in database
+            var books = from b in _context.Books
+                        select b;
+
+            // if searchstring isn't empty
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                // search each row for booktitle or authorname
+                books = books.Where(b => b.Title.Contains(searchString) || b.Author.AuthorName.Contains(searchString));
+            }
+            // return list of books
+            return View("Index", await books.ToListAsync());
         }
     }
 }

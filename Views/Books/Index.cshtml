@@ -4,6 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
+<div class="search-books">
+    <form method="post" class="search-form d-flex" asp-controller="Books" asp-action="IndexWithSearch">
+        <i class="fa-solid fa-magnifying-glass mt-2 mx-2"></i>
+        <input class="form-control mr-sm-2" type="search" placeholder="Sök bok" aria-label="Sök" name="searchString">
+        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sök</button>
+    </form>
+</div>
+
 <h1>Index</h1>
 
 <p>
