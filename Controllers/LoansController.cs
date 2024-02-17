@@ -61,7 +61,6 @@ namespace moment3_efc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LoanId,BookId,BorrowerId,LoanDate")] Loan loan)
         {
-
             if (ModelState.IsValid)
             {
                 _context.Add(loan);

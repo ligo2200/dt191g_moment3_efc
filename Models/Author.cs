@@ -6,7 +6,7 @@ namespace moment3_efc.Models
     {
         public int AuthorId { get; set; }
         [Display(Name = "Författare")]
-        public string? Name { get; set; }
+        public string? AuthorName { get; set; }
 
         // relation
         public List<Book>? Books { get; set; } 

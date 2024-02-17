@@ -22,7 +22,7 @@ namespace moment3_efc.Controllers
         // GET: Authors
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Author.ToListAsync());
+            return View(await _context.Authors.ToListAsync());
         }
 
         // GET: Authors/Details/5
@@ -33,7 +33,7 @@ namespace moment3_efc.Controllers
                 return NotFound();
             }
 
-            var author = await _context.Author
+            var author = await _context.Authors
                 .FirstOrDefaultAsync(m => m.AuthorId == id);
             if (author == null)
             {
@@ -54,7 +54,7 @@ namespace moment3_efc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("AuthorId,Name")] Author author)
+        public async Task<IActionResult> Create([Bind("AuthorId,AuthorName")] Author author)
         {
             if (ModelState.IsValid)
             {
@@ -73,7 +73,7 @@ namespace moment3_efc.Controllers
                 return NotFound();
             }
 
-            var author = await _context.Author.FindAsync(id);
+            var author = await _context.Authors.FindAsync(id);
             if (author == null)
             {
                 return NotFound();
@@ -86,7 +86,7 @@ namespace moment3_efc.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("AuthorId,Name")] Author author)
+        public async Task<IActionResult> Edit(int id, [Bind("AuthorId,AuthorName")] Author author)
         {
             if (id != author.AuthorId)
             {
@@ -124,7 +124,7 @@ namespace moment3_efc.Controllers
                 return NotFound();
             }
 
-            var author = await _context.Author
+            var author = await _context.Authors
                 .FirstOrDefaultAsync(m => m.AuthorId == id);
             if (author == null)
             {
@@ -139,10 +139,10 @@ namespace moment3_efc.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var author = await _context.Author.FindAsync(id);
+            var author = await _context.Authors.FindAsync(id);
             if (author != null)
             {
-                _context.Author.Remove(author);
+                _context.Authors.Remove(author);
             }
 
             await _context.SaveChangesAsync();
@@ -151,7 +151,7 @@ namespace moment3_efc.Controllers
 
         private bool AuthorExists(int id)
         {
-            return _context.Author.Any(e => e.AuthorId == id);
+            return _context.Authors.Any(e => e.AuthorId == id);
         }
     }
 }

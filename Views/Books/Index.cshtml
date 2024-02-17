@@ -4,14 +4,6 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="search-books">
-    <form class="search-form d-flex">
-        <i class="fa-solid fa-magnifying-glass mt-2 mx-2"></i>
-        <input class="form-control mr-sm-2" type="search" placeholder="Sök bok" aria-label="Sök" name="searchString">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Sök</button>
-    </form>
-</div>
-
 <h1>Index</h1>
 
 <p>
@@ -42,7 +34,7 @@
                 @Html.DisplayFor(modelItem => item.PublicationDate)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Author.Name)
+                @Html.DisplayFor(modelItem => item.Author.AuthorName)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.BookId">Edit</a> |
