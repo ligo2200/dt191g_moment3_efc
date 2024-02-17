@@ -15,6 +15,5 @@ namespace moment3_efc.Data
         public DbSet<Borrower> Borrowers { get; set; }
         public DbSet<Loan> Loans { get; set; }
         public DbSet<Author> Authors { get; set; }
-        public DbSet<moment3_efc.Models.Author> Author { get; set; } = default!;
     }
 }
