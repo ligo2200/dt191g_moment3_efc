@@ -57,7 +57,7 @@ namespace moment3_efc.Controllers
         // POST: Loans/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
+        /*[HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("LoanId,BookId,BorrowerId,LoanDate")] Loan loan)
         {
@@ -70,7 +70,50 @@ namespace moment3_efc.Controllers
             ViewData["BookId"] = new SelectList(_context.Books, "BookId", "Title", loan.BookId);
             ViewData["BorrowerId"] = new SelectList(_context.Borrowers, "BorrowerId", "BorrowerName", loan.BorrowerId);
             return View(loan);
+        }*/
+
+        // POST: Loans/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([Bind("LoanId,BookId,BorrowerId,LoanDate")] Loan loan)
+        {
+            // get latest loan for specific book
+            var latestLoan = await _context.Loans
+                .Where(l => l.BookId == loan.BookId)
+                .OrderByDescending(l => l.LoanDate)
+                .FirstOrDefaultAsync();
+
+            // Check if there is an existing loan on book
+            if (latestLoan != null && latestLoan.LoanDate != null)
+            {
+                ModelState.AddModelError(string.Empty, "Boken är redan utlånad.");
+            }
+            else
+            {
+                // if no loan exists on book, add loan
+                if (ModelState.IsValid)
+                {
+                    try
+                    {
+                        _context.Add(loan);
+                        await _context.SaveChangesAsync();
+
+                        return RedirectToAction(nameof(Index));
+                    }
+                    catch (Exception ex)
+                    {
+                        ModelState.AddModelError(string.Empty, "Ett fel uppstod vid skapandet av lånet: " + ex.Message);
+                    }
+                }
+            }
+
+            ViewData["BookId"] = new SelectList(_context.Books, "BookId", "Title", loan.BookId);
+            ViewData["BorrowerId"] = new SelectList(_context.Borrowers, "BorrowerId", "BorrowerName", loan.BorrowerId);
+            return View(loan);
         }
+
 
         // GET: Loans/Edit/5
         public async Task<IActionResult> Edit(int? id)

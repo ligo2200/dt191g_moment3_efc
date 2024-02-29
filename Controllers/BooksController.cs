@@ -173,8 +173,12 @@ namespace moment3_efc.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 // search each row for booktitle or authorname
-                books = books.Where(b => b.Title.Contains(searchString) || b.Author.AuthorName.Contains(searchString));
+                books = books.Where(b => b.Title.ToLower().Contains(searchString.ToLower()) || b.Author.AuthorName.ToLower().Contains(searchString.ToLower()));
             }
+
+            // eagerly load Author data
+            books = books.Include(b => b.Author);
+
             // return list of books
             return View("Index", await books.ToListAsync());
         }
